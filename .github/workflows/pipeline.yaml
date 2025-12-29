@@ -11,6 +11,10 @@ on:
     branches:
       - dev
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   IMAGE_REPO: jayharnesha007/rdicidr
   IMAGE_TAG: ${{ github.sha }}
