@@ -11,6 +11,10 @@ on:
     branches:
       - dev
 
+env:
+  IMAGE_REPO: jayharnesha007/rdicidr
+  IMAGE_TAG: ${{ github.sha }}
+
 jobs:
   ci:
     name: ci-jobs
@@ -38,8 +42,15 @@ jobs:
         working-directory: ./codebase/
         run: CI=true npm run test
 
-      - name: build
+      # - name: build
+      #   working-directory: ./codebase/
+      #   run: npm run build
+
+      - name: docker-image-build
         working-directory: ./codebase/
-        run: npm run build
+        run: | 
+          docker build -t $IMAGE_REPO:$IMAGE_TAG .
+          echo ${{ secrets.PASS }} | docker login -u ${{ secrets.ID }} --password-stdin
+          docker push $IMAGE_REPO:$IMAGE_TAG
 
 
