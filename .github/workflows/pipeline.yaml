@@ -14,8 +14,8 @@ on:
 env:
   IMAGE_REPO: jayharnesha007/rdicidr
   IMAGE_TAG: ${{ github.sha }}
-  AWS_ROLE:
-  REGION:
+  AWS_ROLE: arn:aws:iam::935456168005:role/GitHubAction-AssumeRoleWithAction
+  REGION: us-east-1
 
 jobs:
   ci:
