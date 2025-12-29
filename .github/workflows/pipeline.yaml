@@ -69,4 +69,20 @@ jobs:
           role-to-assume: ${{ env.AWS_ROLE }}
           region: ${{ env.REGION }}
 
+      - name: aws-config-verify
+        run: |
+          aws sts get-caller-identity
+          aws eks update-kubeconfig --name ${{ env.CLUSTER }} --region ${{ env.REGION }}
+          kubectl cluster-info
+
+      - name: application-deployment
+        working-directory: ./rdicidr/
+        run: |
+          helm list
+          helm upgrade --install rdicidr ./ \
+          --set image.value=$IMAGE_TAG \
+          -f values.yaml
+          kubectl rollout status deployment/rdicidr 
+          kubectl rollout history deployment/rdicidr 
+
 
