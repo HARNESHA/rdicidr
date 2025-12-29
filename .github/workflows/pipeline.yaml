@@ -14,6 +14,8 @@ on:
 env:
   IMAGE_REPO: jayharnesha007/rdicidr
   IMAGE_TAG: ${{ github.sha }}
+  AWS_ROLE:
+  REGION:
 
 jobs:
   ci:
@@ -52,5 +54,18 @@ jobs:
           docker build -t $IMAGE_REPO:$IMAGE_TAG .
           echo ${{ secrets.PASS }} | docker login -u ${{ secrets.ID }} --password-stdin
           docker push $IMAGE_REPO:$IMAGE_TAG
+  
+  cd:
+    name: cd-jobs
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      
+      - name: aws-configure
+        uses: aws-actions/configure-aws-credntials@v4
+        with:
+          role-to-assume: ${{ env.AWS_ROLE }}
+          region: ${{ env.REGION }}
 
 
