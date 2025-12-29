@@ -67,7 +67,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ env.AWS_ROLE }}
-          region: ${{ env.REGION }}
+          aws-region: ${{ env.REGION }}
 
       - name: aws-config-verify
         run: |
