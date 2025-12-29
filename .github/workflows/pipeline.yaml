@@ -1,0 +1,45 @@
+name: ci-cd pipeline
+
+on: 
+  workflow_dispatch:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - closed
+  push:
+    branches:
+      - dev
+
+jobs:
+  ci:
+    name: ci-jobs
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: nodejs-setup
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ./codebase/.nvmrc
+
+      - name: npm-depedency-install
+        working-directory: ./codebase/
+        run: |
+          node --version
+          npm install
+
+      - name: eslint-scan
+        working-directory: ./codebase/
+        run: npm run lint
+
+      - name: jest-testing
+        working-directory: ./codebase/
+        run: CI=true npm run test
+
+      - name: build
+        working-directory: ./codebase/
+        run: npm run build
+
+
